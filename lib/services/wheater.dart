@@ -1,12 +1,30 @@
 import 'dart:convert';
 
+import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:simple_weather_app/services/location.dart';
 
 const apiKey = '862c70e380cf5f9e19a3425c76609dbb';
 const apiURL = 'api.openweathermap.org';
 
 class WeatherModel {
-  Future getWeatherData({required double lat, required double lon}) async {
+  Future<dynamic> getCityWeather(String city) async {
+    List<geocoding.Location> locations =
+        await geocoding.locationFromAddress(city);
+    geocoding.Location location = locations.first;
+    return await getWeatherData(
+        lat: location.latitude, lon: location.longitude);
+  }
+
+  Future<dynamic> getWeatherData({double? lat, double? lon}) async {
+    if (lat == null || lon == null) {
+      Location location = Location();
+      Position position = await location.getCurrentLocation();
+      lat = position.latitude;
+      lon = position.longitude;
+    }
+
     var queryParams = {
       'lat': lat.toString(),
       'lon': lon.toString(),
@@ -16,13 +34,14 @@ class WeatherModel {
 
     var url = Uri.https(apiURL, '/data/2.5/weather', queryParams);
     var response = await http.get(url);
-    return jsonDecode(response.body);
+    var data = jsonDecode(response.body);
+    return data;
   }
 
   String getWeatherIcon(int condition) {
-    if (condition < 300)
+    if (condition < 300) {
       return '🌩';
-    else if (condition < 400) {
+    } else if (condition < 400) {
       return '🌧';
     } else if (condition < 600) {
       return '☔️';
