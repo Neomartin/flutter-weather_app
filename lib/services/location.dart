@@ -5,8 +5,9 @@ class Location {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission != LocationPermission.always ||
-          permission != LocationPermission.whileInUse)
+          permission != LocationPermission.whileInUse) {
         await Geolocator.requestPermission();
+      }
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.medium);
       return position;

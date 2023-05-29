@@ -6,36 +6,62 @@ class CityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)!.settings.arguments as Map;
-    String cityName = data['name'];
-    String temperature = data['main']['temp'].toStringAsFixed(0);
-    // String icon = data['weather'][0]['icon'];
-    print(data);
-
+    String? cityName;
     return Scaffold(
-      body: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Center(child: Text('$temperature°', style: kTempText)),
+      appBar: AppBar(
+          title: const Text('City Screen'),
+          backgroundColor: Colors.blueGrey[900],
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context, cityName);
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          )),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/city.jpeg'),
+            fit: BoxFit.cover,
           ),
-          Expanded(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    cityName,
-                    textAlign: TextAlign.right,
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                child: TextField(
+                  decoration: InputDecoration(
+                    icon: const Icon(Icons.location_city),
+                    iconColor: Colors.white,
+                    hintText: 'Enter City Name',
+                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                    focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2.0),
+                    ),
                   ),
-                ],
+                  style: TextStyle(color: Colors.orange.shade300, fontSize: 18),
+                  onChanged: (value) {
+                    cityName = value;
+                  },
+                  onEditingComplete: () {
+                    Navigator.pop(context, cityName);
+                  },
+                  textInputAction: TextInputAction.go,
+                ),
               ),
-            ),
+              const SizedBox(
+                width: double.infinity,
+                child: Text(
+                  'City search',
+                  textAlign: TextAlign.center,
+                  style: kNormalMessageTextStyle,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -10,7 +10,7 @@ void performTasks() async {
 
 void task1() {
   String result = 'task 1 data';
-  print('$result complete');
+  // print('$result complete');
 }
 
 Future<String> task2() async {

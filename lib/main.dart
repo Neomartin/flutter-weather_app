@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoadingScreen(),
-        '/location': (context) => LocationScreen(),
+        '/location': (context) => LocationScreen(context: context),
         '/city': (context) => const CityScreen()
       },
     );
